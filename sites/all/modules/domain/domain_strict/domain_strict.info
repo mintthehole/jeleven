@@ -1,0 +1,13 @@
+name = Domain Strict
+description = Forces users to be assigned to a domain in order to view content on that domain.
+package = Domain Access
+dependencies[] = domain
+core = 7.x
+files[] = domain_strict.test
+
+; Information added by  packaging script on 2013-12-04
+version = "7.x-3.10+10-dev"
+core = "7.x"
+project = "domain"
+datestamp = "1386182910"
+

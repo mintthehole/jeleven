@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Defines a display format for a link that will embed a player.
+ */
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function media_link_field_formatter_info() {
+  return array(
+    'audio_player' => array(
+      'label' => t('Audio Player'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'field types' => array('link_field'),
+    ),
+    /*
+    'video_player' => array(
+      'label' => t('Video Player'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'field types' => array('link_field'),
+    ),
+    */
+  );
+}
+
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function media_link_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array();
+  foreach ($items as $delta => $item) {
+    $elements[$delta] = array(
+      '#markup' => theme('link_formatter_'. $display['type'], array('element' => $item, 'field' => $instance)),
+    );
+  }
+  return $elements;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function media_link_theme() {
+  return array(
+      'link_formatter_audio_player' => array(
+          'variables' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * Theme function for 'audio player' link field formatter.
+ */
+function theme_link_formatter_audio_player($vars) {
+
+  $url = $vars['element']['url'];
+  return "<div>" .
+  "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0' width='210' height='25' id='mp3playerlightsmallv3' align='middle'>" .
+  "<param name='allowScriptAccess' value='sameDomain' />" .
+  "<param name='movie' value='http://www.podbean.com/podcast-audio-video-blog-player/mp3playerlightsmallv3.swf?audioPath=" . $url . "&autoStart=no' />" .
+  "<param name='quality' value='high' /><param name='bgcolor' value='#ffffff' /><param name='wmode' value='transparent' />" .
+  "<embed src='http://www.podbean.com/podcast-audio-video-blog-player/mp3playerlightsmallv3.swf?audioPath=" . $url . "&autoStart=no' quality='high'  width='210' height='25' name='mp3playerlightsmallv3' align='middle' allowScriptAccess='sameDomain' wmode='transparent' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>" .
+  "</object>" .
+  "</div>";
+}
